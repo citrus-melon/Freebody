@@ -96,20 +96,21 @@ const calculateNet = () => {
     if (down.negative) netY+=down.force; else netY-=down.force;
     if (left.negative) netX+=left.force; else netX-=left.force;
     if (right.negative) netX-=right.force; else netX+=right.force;
+
     if(netX > 0) {
-        statement += netX + "N to the right and "
+        statement += netX + "N to the right"
     } else if (netX < 0) {
-        statement += (0-netX) + "N to the left and "
-    } else {
-        statement += "0N horizontally and "
+        statement += (0-netX) + "N to the left"
     }
+
+    if (netX != 0 && netY != 0) statement += " and ";
+
     if(netY > 0) {
         statement += netY + "N up"
     } else if (netY < 0) {
         statement += (0-netY) + "N down"
-    } else {
-        statement += "0N vertically"
     }
+
     if (netX == 0 && netY == 0) {
         statement = " Net force: 0N (Balanced)"
     } else {
