@@ -48,3 +48,28 @@ svg {
     stroke:#ffffff;
     stroke-width:1;
 }
+
+.toolBar {
+   position: absolute;
+   color: white;
+   font-size: 30px;
+   font-family: sans-serif;
+   max-width: 50%;
+   margin: 0;
+}
+
+#netForce {
+    bottom: 30px;
+    right: 30px;
+    text-align: end;
+}
+
+#instructions {
+    left:30px;
+    top: 30px;
+}
+
+#credit {
+    right:30px;
+    top: 30px;
+}

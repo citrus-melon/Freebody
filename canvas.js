@@ -110,6 +110,11 @@ const calculateNet = () => {
     } else {
         statement += "0N vertically"
     }
+    if (netX == 0 && netY == 0) {
+        statement = " Net force: 0N (Balanced)"
+    } else {
+        statement += " (Unbalanced)"
+    }
     netForcePara.innerText=statement;
 }
 
