@@ -79,22 +79,22 @@ const drag = (evt) => {
     switch (selectedElement.id) {
         case "leftArrow":
             forceLeft = Math.round(10-constrain(coord.x, 0, 100)/10);
-            selectedElement.setAttribute("d", "M 100.001,150 H"+constrain(coord.x, 0, 100));
+            selectedElement.setAttribute("x2", constrain(coord.x, 0, 100));
             leftText.textContent = forceLeft+"N";
             break;
         case "rightArrow":
             forceRight = Math.round(constrain(coord.x, 200, 300)/10-20);
-            selectedElement.setAttribute("d", "M 199.999,150 H"+constrain(coord.x, 200, 300));
+            selectedElement.setAttribute("x2", constrain(coord.x, 200, 300));
             rightText.textContent = forceRight+"N";
             break;
         case "topArrow":
             forceUp = Math.round(10-constrain(coord.y, 0, 100)/10);
-            selectedElement.setAttribute("d", "M 150,100.001 V"+constrain(coord.y, 0, 100));
+            selectedElement.setAttribute("y2", constrain(coord.y, 0, 100));
             topText.textContent = forceUp+"N";
             break;
         case "bottomArrow":
             forceDown = Math.round(constrain(coord.y, 200, 300)/10-20)
-            selectedElement.setAttribute("d", "M 150,199.999 V "+constrain(coord.y, 200, 300));
+            selectedElement.setAttribute("y2", constrain(coord.y, 200, 300));
             bottomText.textContent = forceDown+"N";
             break;
     }

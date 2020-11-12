@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(45deg, #002fca 0% 20%, #53059c);
+    background: linear-gradient(45deg, rgba(95,0,167,1) 0%, rgba(14,0,167,1) 38%, rgb(0, 134, 196) 100%);
     user-select: none;
 }
 
