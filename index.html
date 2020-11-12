@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Interactive Free Body Diagram</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <noscript>Please enable javascript.</noscript>
+    <svg version="1.1" viewBox="0 0 300 300" height="100%" id="svgCanvas">
+        <defs id="defs2">
+            <marker orient="auto" refY="0.0" refX="0.0" id="arrowHead" style="overflow:visible;" markerUnits="strokeWidth">
+                <path id="path3045" d="M 0.0,0.0 L -5.0,-5.0 L 12.5,0.0 L -5.0,5.0 L 0.0,0.0 z" transform="scale(0.5)">
+            </marker>
+        </defs>
+
+        <g id="layer1">
+            <rect y="100" x="100" height="100" width="100" id="box"/>
+            <path id="leftArrow" d="M 100,150 h -50" class="arrow"/>
+            <path id="topArrow" d="M 150,100 v -50" class="arrow"/>
+            <path id="bottomArrow" d="M 150,200 v 50" class="arrow"/>
+            <path id="rightArrow" d="M 200,150 h 50" class="arrow"/>
+            
+            
+            <text x="205" y="160" class="label" id="rightLabel" text-anchor="start" alignment-baseline="hanging">5N</text>
+            <text x="160" y="95" class="label" id="topLabel" text-anchor="start" alignment-baseline="baseline">5N</text>
+            <text x="95" y="140" class="label" id="leftLabel" text-anchor="end" alignment-baseline="baseline">5N</text>
+            <text x="140" y="205" class="label" id="bottomLabel" text-anchor="end" alignment-baseline="hanging">5N</text>
+        </g>
+    </svg>
+
+<script type="text/javascript" src="canvas.js"></script>
+</body>
+
+</html>
