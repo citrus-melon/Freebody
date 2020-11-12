@@ -13,69 +13,36 @@ let rightNegative = false;
 let upNegative = false;
 let downNegative = false;
 
-const getMousePosition = (evt) => {
+const getMousePosition = (e) => {
     var CTM = svg.getScreenCTM();
     return {
-        x: (evt.clientX - CTM.e) / CTM.a,
-        y: (evt.clientY - CTM.f) / CTM.d
+        x: (e.clientX - CTM.e) / CTM.a,
+        y: (e.clientY - CTM.f) / CTM.d
     };
 }
 
 const constrain = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const startDrag = (evt) => {
-    if (evt.target.classList.contains('arrow')) {
-        selectedElement = evt.target;
+const startDrag = (e) => {
+    if (e.target.classList.contains('arrow')) {
+        selectedElement = e.target;
     }
 }
 
 const flip = (e) => {
     if (!e.target.classList.contains('arrow')) return;
-    if (e.target.style.markerEnd)
-    switch (e.target.id) {
-        case "leftArrow":
-            if (leftNegative) {
-                e.target.style.markerEnd = "";
-                e.target.style.markerStart = "url(#arrowHead)";
-            } else {
-                e.target.style.markerEnd = "url(#arrowHead)";
-                e.target.style.markerStart = "";
-            }
-            break;
-        case "rightArrow":
-            if (rightNegative) {
-                e.target.style.markerEnd = "";
-                e.target.style.markerStart = "url(#arrowHead)";
-            } else {
-                e.target.style.markerEnd = "url(#arrowHead)";
-                e.target.style.markerStart = "";
-            }
-            break;
-        case "topArrow":
-            if (upNegative) {
-                e.target.style.markerEnd = "";
-                e.target.style.markerStart = "url(#arrowHead)";
-            } else {
-                e.target.style.markerEnd = "url(#arrowHead)";
-                e.target.style.markerStart = "";
-            }
-            break;
-        case "bottomArrow":
-            if (downNegative) {
-                e.target.style.markerEnd = "";
-                e.target.style.markerStart = "url(#arrowHead)";
-            } else {
-                e.target.style.markerEnd = "url(#arrowHead)";
-                e.target.style.markerStart = "";
-            }
-            break;
+    e.preventDefault();
+    if (e.target.classList.contains('negative')) {
+        e.target.classList.remove("negative");
+    } else {
+        e.target.classList.add("negative");
     }
 }
 
-const drag = (evt) => {
+const drag = (e) => {
     if (!selectedElement) return;
-    evt.preventDefault();
-    let coord = getMousePosition(evt);
+    e.preventDefault();
+    let coord = getMousePosition(e);
     switch (selectedElement.id) {
         case "leftArrow":
             forceLeft = Math.round(10-constrain(coord.x, 0, 100)/10);
@@ -99,17 +66,12 @@ const drag = (evt) => {
             break;
     }
 }
-const endDrag = (evt) => {
+const endDrag = (e) => {
     selectedElement = null;
 }
 
-svg.addEventListener('mousedown', (e) => {
-    if (e.button == 2) {
-        flip(e)
-    } else {
-        startDrag(e)
-    }
-});
+svg.addEventListener('mousedown', startDrag);
+svg.addEventListener('contextmenu', flip)
 document.body.addEventListener('mousemove', drag);
 document.body.addEventListener('mouseup', endDrag);
 document.body.addEventListener('mouseleave', endDrag);
