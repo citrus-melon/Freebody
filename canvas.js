@@ -1,22 +1,43 @@
 const svg = document.getElementById("svgCanvas");
+const netForcePara = document.getElementById("netForce");
 
-const topArrow = document.getElementById("topArrow");
-const bottomArrow = document.getElementById("bottomArrow");
-const leftArrow = document.getElementById("leftArrow");
-const rightArrow = document.getElementById("rightArrow");
+let selected = null;
 
-let selectedElement = null;
-
-topArrow.labelElement = document.getElementById("topLabel");
-bottomArrow.labelElement  = document.getElementById("bottomLabel");
-leftArrow.labelElement  = document.getElementById("leftLabel");
-rightArrow.labelElement  = document.getElementById("rightLabel");
-
-let forces = {
-    up:0,
-    down:0,
-    left:0,
-    right:0
+const up = {
+    force:5,
+    negative:false,
+    arrow: document.getElementById("topArrow"),
+    label: document.getElementById("topLabel"),
+    lowerLimit: 0,
+    upperLimit: 100,
+    axis: "y"
+}
+const down = {
+    force:5,
+    negative:false,
+    arrow : document.getElementById("bottomArrow"),
+    label : document.getElementById("bottomLabel"),
+    lowerLimit : 200,
+    upperLimit : 300,
+    axis : "y"
+}
+const left = {
+    force:5,
+    negative:false,
+    arrow : document.getElementById("leftArrow"),
+    label : document.getElementById("leftLabel"),
+    lowerLimit : 0,
+    upperLimit : 100,
+    axis : "x"
+}
+const right = {
+    force:5,
+    negative:false,
+    arrow : document.getElementById("rightArrow"),
+    label : document.getElementById("rightLabel"),
+    lowerLimit : 200,
+    upperLimit : 300,
+    axis : "x"
 }
 
 const getMousePosition = (e) => {
@@ -29,64 +50,84 @@ const getMousePosition = (e) => {
 
 const constrain = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const startDrag = (e) => {
-    coord = getMousePosition(e);
-    if (coord.x >= 100 && coord.x <= 200) {
-        if (coord.y <= 100) {
-            selectedElement = topArrow;
+const raycast = (e) => {
+    coords = getMousePosition(e);
+    let target = null;
+    if (coords.x >= 100 && coords.x <= 200) {
+        if (coords.y <= 100) {
+            target = up;
         }
-        if (coord.y >= 200) {
-            selectedElement = bottomArrow;
+        if (coords.y >= 200) {
+            target = down;
         }
-    } else if (coord.y >= 100 && coord.y <= 200) {
-        if (coord.x <= 100) {
-            selectedElement = leftArrow;
+    } else if (coords.y >= 100 && coords.y <= 200) {
+        if (coords.x <= 100) {
+            target = left;
         }
-        if (coord.x >= 200) {
-            selectedElement = rightArrow;
+        if (coords.x >= 200) {
+            target = right;
         }
     }
+    return target;
+}
+
+const startDrag = (e) => {
+    selected = raycast(e);
 }
 
 const flip = (e) => {
-    if (!e.target.classList.contains('arrow')) return;
+    target = raycast(e);
     e.preventDefault();
-    if (e.target.classList.contains('negative')) {
-        e.target.classList.remove("negative");
+    if (!target) return;
+    if (target.negative) {
+        target.negative = false;
+        target.arrow.classList.remove("negative");
     } else {
-        e.target.classList.add("negative");
+        target.negative = true;
+        target.arrow.classList.add("negative");
     }
 }
 
-const drag = (e) => {
-    if (!selectedElement) return;
-    e.preventDefault();
-    let coord = getMousePosition(e);
-    switch (selectedElement.id) {
-        case "leftArrow":
-            forceLeft = Math.round(10-constrain(coord.x, 0, 100)/10);
-            selectedElement.setAttribute("x2", constrain(coord.x, 0, 100));
-            leftText.textContent = forceLeft+"N";
-            break;
-        case "rightArrow":
-            forceRight = Math.round(constrain(coord.x, 200, 300)/10-20);
-            selectedElement.setAttribute("x2", constrain(coord.x, 200, 300));
-            rightText.textContent = forceRight+"N";
-            break;
-        case "topArrow":
-            forceUp = Math.round(10-constrain(coord.y, 0, 100)/10);
-            selectedElement.setAttribute("y2", constrain(coord.y, 0, 100));
-            topText.textContent = forceUp+"N";
-            break;
-        case "bottomArrow":
-            forceDown = Math.round(constrain(coord.y, 200, 300)/10-20)
-            selectedElement.setAttribute("y2", constrain(coord.y, 200, 300));
-            bottomText.textContent = forceDown+"N";
-            break;
+const calculateNet = () => {
+    let netX = 0;
+    let netY = 0;
+    let statement = "Net force: ";
+    if (up.negative) netY-=up.force; else netY+=up.force;
+    if (down.negative) netY+=down.force; else netY-=down.force;
+    if (left.negative) netX+=left.force; else netX-=left.force;
+    if (right.negative) netX-=right.force; else netX+=right.force;
+    if(netX > 0) {
+        statement += netX + "N to the right and "
+    } else if (netX < 0) {
+        statement += (0-netX) + "N to the left and "
+    } else {
+        statement += "0N horizontally and "
     }
+    if(netY > 0) {
+        statement += netY + "N up"
+    } else if (netY < 0) {
+        statement += (0-netY) + "N down"
+    } else {
+        statement += "0N vertically"
+    }
+    netForcePara.innerText=statement;
 }
+
+const drag = (e) => {
+    if (!selected) return;
+    e.preventDefault();
+    let coords = getMousePosition(e)
+    let constrainedAxis = constrain(selected.axis == "x" ? coords.x : coords.y, selected.lowerLimit, selected.upperLimit);
+    selected.arrow.setAttribute(selected.axis+"2", constrainedAxis);
+    let value = constrainedAxis - selected.lowerLimit;
+    if (selected == up || selected == left) value = selected.upperLimit - value;
+    selected.force = Math.round(value/10);
+    selected.label.textContent = selected.force+"N"
+    calculateNet();
+}
+
 const endDrag = (e) => {
-    selectedElement = null;
+    selected = null;
 }
 
 svg.addEventListener('mousedown', startDrag);
