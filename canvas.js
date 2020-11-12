@@ -1,17 +1,23 @@
 const svg = document.getElementById("svgCanvas");
-const topText = document.getElementById("topLabel");
-const bottomText = document.getElementById("bottomLabel");
-const leftText = document.getElementById("leftLabel");
-const rightText = document.getElementById("rightLabel");
+
+const topArrow = document.getElementById("topArrow");
+const bottomArrow = document.getElementById("bottomArrow");
+const leftArrow = document.getElementById("leftArrow");
+const rightArrow = document.getElementById("rightArrow");
+
 let selectedElement = null;
-let forceLeft = 0;
-let forceRight = 0;
-let forceUp = 0;
-let forceDown = 0;
-let leftNegative = false;
-let rightNegative = false;
-let upNegative = false;
-let downNegative = false;
+
+topArrow.labelElement = document.getElementById("topLabel");
+bottomArrow.labelElement  = document.getElementById("bottomLabel");
+leftArrow.labelElement  = document.getElementById("leftLabel");
+rightArrow.labelElement  = document.getElementById("rightLabel");
+
+let forces = {
+    up:0,
+    down:0,
+    left:0,
+    right:0
+}
 
 const getMousePosition = (e) => {
     var CTM = svg.getScreenCTM();
@@ -24,8 +30,21 @@ const getMousePosition = (e) => {
 const constrain = (value, min, max) => Math.min(Math.max(value, min), max);
 
 const startDrag = (e) => {
-    if (e.target.classList.contains('arrow')) {
-        selectedElement = e.target;
+    coord = getMousePosition(e);
+    if (coord.x >= 100 && coord.x <= 200) {
+        if (coord.y <= 100) {
+            selectedElement = topArrow;
+        }
+        if (coord.y >= 200) {
+            selectedElement = bottomArrow;
+        }
+    } else if (coord.y >= 100 && coord.y <= 200) {
+        if (coord.x <= 100) {
+            selectedElement = leftArrow;
+        }
+        if (coord.x >= 200) {
+            selectedElement = rightArrow;
+        }
     }
 }
 
