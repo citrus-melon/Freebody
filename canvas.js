@@ -130,6 +130,7 @@ const drag = (e) => {
     selected.arrow.setAttribute(selected.axis+"2", constrainedAxis);
     let value = constrainedAxis - selected.lowerLimit;
     if (selected == up || selected == left) value = selected.upperLimit - value;
+    selected.arrow.setAttribute("stroke-width", 1+value/50)
     selected.force = Math.round(value/forceScale);
     selected.label.textContent = selected.force+"N"
     calculateNet();
@@ -146,6 +147,7 @@ const changeMaxForce = (e) => {
         direction.force = 0;
         if (direction == up || direction == left) direction.arrow.setAttribute(direction.axis+"2", direction.upperLimit);
         else direction.arrow.setAttribute(direction.axis+"2", direction.lowerLimit);
+        direction.arrow.setAttribute("stroke-width", 1)
         direction.label.textContent = "0N";
     });
 }

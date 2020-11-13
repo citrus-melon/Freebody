@@ -34,7 +34,6 @@ svg {
 .arrow {
     fill:none;
     stroke:#ffffff;
-    stroke-width:1;
     marker-end:url(#arrowHead);
 }
 
