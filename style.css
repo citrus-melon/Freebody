@@ -11,7 +11,7 @@ body, html {
 
 svg {
     overflow: visible;
-    margin: 5%;
+    margin: 5vh 5vw;
 }
 
 .label {
@@ -72,4 +72,18 @@ svg {
 #credit {
     right:30px;
     top: 30px;
+}
+
+#maxForceWrapper {
+    left:30px;
+    bottom:30px;
+}
+#maxForce {
+    width: 5ch;
+    display: inline;
+    background: none;
+    font: inherit;
+    color: inherit;
+    border: none;
+    border-bottom: 2px solid white;
 }

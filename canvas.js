@@ -1,7 +1,9 @@
 const svg = document.getElementById("svgCanvas");
 const netForcePara = document.getElementById("netForce");
+const maxForceInput = document.getElementById("maxForce");
 
 let selected = null;
+let forceScale = 10;
 
 const up = {
     force:5,
@@ -39,6 +41,7 @@ const right = {
     upperLimit : 300,
     axis : "x"
 }
+const directions = [up, down, left, right];
 
 const getMousePosition = (e) => {
     var CTM = svg.getScreenCTM();
@@ -127,7 +130,7 @@ const drag = (e) => {
     selected.arrow.setAttribute(selected.axis+"2", constrainedAxis);
     let value = constrainedAxis - selected.lowerLimit;
     if (selected == up || selected == left) value = selected.upperLimit - value;
-    selected.force = Math.round(value/10);
+    selected.force = Math.round(value/forceScale);
     selected.label.textContent = selected.force+"N"
     calculateNet();
 }
@@ -136,8 +139,20 @@ const endDrag = (e) => {
     selected = null;
 }
 
+const changeMaxForce = (e) => {
+    maxForceInput.value = Math.round(constrain(maxForceInput.value, 0, 200));
+    forceScale = 100/maxForceInput.value;
+    directions.forEach(direction => {
+        direction.force = 0;
+        if (direction == up || direction == left) direction.arrow.setAttribute(direction.axis+"2", direction.upperLimit);
+        else direction.arrow.setAttribute(direction.axis+"2", direction.lowerLimit);
+        direction.label.textContent = "0N";
+    });
+}
+
 svg.addEventListener('mousedown', startDrag);
 svg.addEventListener('contextmenu', flip)
 document.body.addEventListener('mousemove', drag);
 document.body.addEventListener('mouseup', endDrag);
 document.body.addEventListener('mouseleave', endDrag);
+maxForceInput.addEventListener('change', changeMaxForce);
